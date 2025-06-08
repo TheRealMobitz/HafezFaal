@@ -64,12 +64,10 @@ api.interceptors.response.use(
     const { response } = error;
     
     if (response?.status === 403) {
-      console.warn('CSRF or authentication error. Please refresh the page.');
+      console.warn('CSRF or authentication error.');
     } else if (response?.status === 401) {
       console.warn('Authentication required. Redirecting to login...');
-      // Clear any stored auth state
       localStorage.removeItem('user');
-      // Redirect to login if not already there
       if (!window.location.pathname.includes('/login')) {
         window.location.href = '/login';
       }

@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="babe8b78-b58a-4c76-a43e-a57a34c2479a" name="Changes" comment="first version">
+    <list default="true" id="babe8b78-b58a-4c76-a43e-a57a34c2479a" name="Changes" comment="second version (added animations)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/components/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/components/HomePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HafezFaal/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/HafezFaal/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faal/api_urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/faal/api_urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faal/api_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/faal/api_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faal/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/faal/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/components/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/components/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/services/api.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +22,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "TheRealMobitz"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/TheRealMobitz/HafezFaal.git",
+    "accountId": "1db6c6b7-614d-4396-b6e1-d807474d7781"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -29,20 +43,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="HafezFaal" type="Python.DjangoServer" factoryName="Django server">
       <module name="HafezFaal" />
@@ -90,6 +105,8 @@
       <workItem from="1749361033974" duration="4533000" />
       <workItem from="1749387326727" duration="4275000" />
       <workItem from="1749396994244" duration="181000" />
+      <workItem from="1749401550641" duration="204000" />
+      <workItem from="1749402953278" duration="1717000" />
     </task>
     <task id="LOCAL-00001" summary="meow">
       <option name="closed" value="true" />
@@ -107,7 +124,23 @@
       <option name="project" value="LOCAL" />
       <updated>1749391076405</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="second version (added animations">
+      <option name="closed" value="true" />
+      <created>1749401567590</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1749401567590</updated>
+    </task>
+    <task id="LOCAL-00004" summary="second version (added animations">
+      <option name="closed" value="true" />
+      <created>1749401592903</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1749401592903</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +149,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="meow" />
     <MESSAGE value="first version" />
-    <option name="LAST_COMMIT_MESSAGE" value="first version" />
+    <MESSAGE value="second version (added animations" />
+    <option name="LAST_COMMIT_MESSAGE" value="second version (added animations" />
   </component>
 </project>

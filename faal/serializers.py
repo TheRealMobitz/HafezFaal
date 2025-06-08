@@ -2,42 +2,70 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Quote, HafezGhazal, UserDailyFaal
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined']
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6)
+    password2 = serializers.CharField(write_only=True)
+    
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'password2']
+        extra_kwargs = {
+            'email': {'required': True},
+            'username': {'required': True},
+        }
+    
+    def validate_email(self, value):
+        if not value:
+            raise serializers.ValidationError("ایمیل الزامی است")
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("این ایمیل قبلاً استفاده شده است")
+        return value
+    
+    def validate_username(self, value):
+        if not value:
+            raise serializers.ValidationError("نام کاربری الزامی است")
+        if len(value) < 3:
+            raise serializers.ValidationError("نام کاربری باید حداقل ۳ کاراکتر باشد")
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("این نام کاربری قبلاً گرفته شده است")
+        return value
+    
+    def validate_password(self, value):
+        if not value:
+            raise serializers.ValidationError("رمز عبور الزامی است")
+        if len(value) < 6:
+            raise serializers.ValidationError("رمز عبور باید حداقل ۶ کاراکتر باشد")
+        return value
+    
+    def validate(self, attrs):
+        if attrs.get('password') != attrs.get('password2'):
+            raise serializers.ValidationError({"password2": "رمز عبور و تکرار آن یکسان نیستند"})
+        return attrs
+    
+    def create(self, validated_data):
+        # Remove password2 as it's not needed for user creation
+        validated_data.pop('password2', None)
+        user = User.objects.create_user(**validated_data)
+        return user
+
 class QuoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quote
-        fields = ['id', 'text', 'author', 'added_date']
+        fields = '__all__'
 
 class HafezGhazalSerializer(serializers.ModelSerializer):
     class Meta:
         model = HafezGhazal
-        fields = ['id', 'ghazal_number', 'persian_text', 'english_translation']
+        fields = '__all__'
 
 class UserDailyFaalSerializer(serializers.ModelSerializer):
     ghazal = HafezGhazalSerializer(read_only=True)
     
     class Meta:
         model = UserDailyFaal
-        fields = ['id', 'ghazal', 'date']
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    password_confirm = serializers.CharField(write_only=True)
-    
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password', 'password_confirm']
-    
-    def validate(self, data):
-        if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError("Passwords don't match")
-        return data
-    
-    def create(self, validated_data):
-        validated_data.pop('password_confirm')
-        user = User.objects.create_user(**validated_data)
-        return user
+        fields = '__all__'

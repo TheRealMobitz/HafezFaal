@@ -70,19 +70,29 @@ const Register = () => {
     setErrors({});
 
     try {
-      await register(formData.username, formData.email, formData.password);
-      navigate('/dashboard');
+      // Don't include password2 in the API call data
+      const userData = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        password2: formData.password2  // Include for backend validation
+      };
+      
+      const result = await register(formData.username, formData.email, formData.password);
+      
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setErrors({ general: result.error });
+      }
     } catch (error) {
       console.error('Register error:', error);
-      if (error.response?.data) {
-        setErrors(error.response.data);
-      } else {
-        setErrors({ general: 'خطا در ثبت نام. لطفاً دوباره تلاش کنید.' });
-      }
+      setErrors({ general: 'خطای غیرمنتظره رخ داده است.' });
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">

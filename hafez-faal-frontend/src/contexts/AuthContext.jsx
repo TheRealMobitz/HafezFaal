@@ -62,7 +62,15 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password) => {
     try {
-      const response = await apiService.register({ username, email, password });
+      // Send the data in the correct format with password2 for validation
+      const userData = { 
+        username, 
+        email, 
+        password,
+        password2: password  // Backend expects this for validation
+      };
+      
+      const response = await apiService.register(userData);
       setUser(response.data.user || response.data);
       return { success: true };
     } catch (error) {
@@ -71,7 +79,19 @@ export const AuthProvider = ({ children }) => {
       let errorMessage = 'خطا در ثبت نام. لطفاً دوباره تلاش کنید.';
       
       if (error.response?.status === 400) {
-        errorMessage = error.response.data?.message || 'اطلاعات وارد شده صحیح نیست.';
+        // Handle validation errors from backend
+        const errorData = error.response.data;
+        if (errorData?.username) {
+          errorMessage = `نام کاربری: ${errorData.username[0]}`;
+        } else if (errorData?.email) {
+          errorMessage = `ایمیل: ${errorData.email[0]}`;
+        } else if (errorData?.password) {
+          errorMessage = `رمز عبور: ${errorData.password[0]}`;
+        } else if (errorData?.non_field_errors) {
+          errorMessage = errorData.non_field_errors[0];
+        } else {
+          errorMessage = errorData?.message || 'اطلاعات وارد شده صحیح نیست.';
+        }
       } else if (error.response?.status === 500) {
         errorMessage = 'خطای سرور. لطفاً بعداً تلاش کنید.';
       } else if (error.response?.data?.error) {

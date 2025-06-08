@@ -5,14 +5,26 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 from datetime import time
+import json
 from .models import Quote, HafezGhazal, UserDailyFaal
 from .serializers import (
     QuoteSerializer, HafezGhazalSerializer, 
     UserDailyFaalSerializer, UserSerializer, UserRegistrationSerializer
 )
+
+# CSRF Token endpoint
+@api_view(['GET'])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    """Get CSRF token for API requests"""
+    token = get_token(request)
+    return Response({'csrf_token': token})
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -80,38 +92,69 @@ class HafezGhazalListView(generics.ListAPIView):
 @permission_classes([AllowAny])
 @csrf_exempt
 def register_user(request):
-    serializer = UserRegistrationSerializer(data=request.data)
-    if serializer.is_valid():
-        user = serializer.save()
-        return Response({'message': 'User created successfully'}, status=201)
-    return Response(serializer.errors, status=400)
+    try:
+        # Handle both JSON and form data
+        if hasattr(request, 'data') and hasattr(request.data, 'get'):
+            data = request.data
+        else:
+            data = json.loads(request.body.decode('utf-8'))
+        
+        serializer = UserRegistrationSerializer(data=data)
+        if serializer.is_valid():
+            user = serializer.save()
+            # Automatically log in the user after registration
+            login(request, user)
+            return Response({
+                'message': 'User created successfully',
+                'user': UserSerializer(user).data
+            }, status=201)
+        return Response(serializer.errors, status=400)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @csrf_exempt
 def login_user(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    
-    user = authenticate(username=username, password=password)
-    if user:
-        login(request, user)
-        serializer = UserSerializer(user)
-        return Response({
-            'user': serializer.data,
-            'message': 'Login successful'
-        })
-    return Response({'message': 'Invalid credentials'}, status=401)
+    try:
+        # Handle both JSON and form data
+        if hasattr(request, 'data') and hasattr(request.data, 'get'):
+            username = request.data.get('username')
+            password = request.data.get('password')
+        else:
+            data = json.loads(request.body.decode('utf-8'))
+            username = data.get('username')
+            password = data.get('password')
+        
+        if not username or not password:
+            return Response({'error': 'Username and password required'}, status=400)
+        
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            serializer = UserSerializer(user)
+            return Response({
+                'user': serializer.data,
+                'message': 'Login successful'
+            })
+        return Response({'error': 'Invalid credentials'}, status=401)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@csrf_exempt
 def logout_user(request):
-    logout(request)
-    return Response({'message': 'Logout successful'})
+    try:
+        logout(request)
+        return Response({'message': 'Logout successful'})
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user(request):
-    serializer = UserSerializer(request.user)
-    return Response(serializer.data)
+    try:
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)

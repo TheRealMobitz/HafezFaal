@@ -55,7 +55,7 @@ const GhazalDetail = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-persian-cream to-persian-ivory dark:bg-dark-gradient theme-transition">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-xl text-theme-accent animate-pulse font-persian">
           در حال بارگذاری غزل...
         </div>
@@ -65,9 +65,10 @@ const GhazalDetail = () => {
 
   if (error || !ghazal) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-persian-cream to-persian-ivory dark:bg-dark-gradient theme-transition">
-        <div className="card max-w-md mx-auto text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">خطا</h2>
+      <div className="text-center py-16">
+        <div className="card max-w-md mx-auto">
+          <div className="text-6xl mb-6">😔</div>
+          <h2 className="text-2xl font-bold text-theme-accent mb-4">خطا</h2>
           <p className="text-theme-secondary mb-6">{error || 'غزل یافت نشد'}</p>
           <Link to="/ghazals" className="btn-primary">
             بازگشت به فهرست غزل‌ها
@@ -78,31 +79,34 @@ const GhazalDetail = () => {
   }
 
   return (
-    <div className="min-h-screen font-persian bg-gradient-to-br from-persian-cream to-persian-ivory dark:bg-dark-gradient theme-transition">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center text-sm text-theme-secondary mb-4 space-x-2 space-x-reverse">
-            <Link to="/" className="hover:text-theme-accent transition-colors">خانه</Link>
-            <span>/</span>
-            <Link to="/ghazals" className="hover:text-theme-accent transition-colors">غزل‌ها</Link>
-            <span>/</span>
-            <span>غزل {ghazal.ghazal_number}</span>
-          </div>
-          
-          <h1 className="text-4xl font-bold text-theme-accent text-center">
-            غزل شماره {ghazal.ghazal_number}
-          </h1>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center text-sm text-theme-secondary mb-4 space-x-2 space-x-reverse">
+          <Link to="/" className="hover:text-theme-accent transition-colors">خانه</Link>
+          <span>/</span>
+          <Link to="/ghazals" className="hover:text-theme-accent transition-colors">غزل‌ها</Link>
+          <span>/</span>
+          <span>غزل {ghazal.ghazal_number}</span>
         </div>
+        
+        <h1 className="text-4xl font-bold text-theme-accent text-center">
+          غزل شماره {ghazal.ghazal_number}
+        </h1>
+      </div>
 
-        {/* Content */}
-        <div className="mb-8">
-          <div className="card relative overflow-hidden">
-            {/* Decorative border */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-persian-gold to-persian-saffron dark:from-dark-persian-gold dark:to-dark-persian-amber"></div>
-            
-            {/* Persian Text */}
-            <div className="mb-6">
+      {/* Content */}
+      <div className="mb-8">
+        <div className="card relative overflow-hidden">
+          {/* Decorative border */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-persian-gold to-persian-saffron dark:from-dark-persian-gold dark:to-dark-persian-amber"></div>
+          
+          {/* Persian Text */}
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold text-theme-accent mb-6 text-center">
+              متن فارسی
+            </h3>
+            <div className="bg-persian-ivory/30 dark:bg-dark-bg-secondary/30 p-6 rounded-xl">
               {(showFullText ? ghazal.persian_text : getPreviewText(ghazal.persian_text))
                 .split('\n').map((line, index) => (
                 <p 
@@ -149,7 +153,7 @@ const GhazalDetail = () => {
                 {showInterpretation && (
                   <div className="bg-persian-ivory/50 dark:bg-dark-bg-secondary/50 p-6 rounded-xl border border-theme slide-down mt-6">
                     <h4 className="text-xl font-semibold text-theme-accent mb-4 text-center">
-                      تفسیر و معنی:
+                      تفسیر و معنی
                     </h4>
                     {ghazal.english_translation.split('\n').map((line, index) => (
                       <p 
@@ -165,35 +169,49 @@ const GhazalDetail = () => {
               </div>
             )}
           </div>
+        </div>
+      </div>
 
-          {/* Actions */}
-          <div className="flex flex-col space-y-6">
-            {/* Navigation Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button 
-                onClick={goToPrevious} 
-                className="btn-secondary flex items-center justify-center space-x-2 space-x-reverse"
-                disabled={parseInt(ghazalNumber) <= 1}
-              >
-                <span>←</span>
-                <span>غزل قبلی</span>
-              </button>
-              
-              <Link 
-                to="/ghazals" 
-                className="btn-primary text-center"
-              >
-                فهرست غزل‌ها
-              </Link>
-              
-              <button 
-                onClick={goToNext} 
-                className="btn-secondary flex items-center justify-center space-x-2 space-x-reverse"
-              >
-                <span>غزل بعدی</span>
-                <span>→</span>
-              </button>
-            </div>
+      {/* Navigation */}
+      <div className="flex justify-between items-center mb-8">
+        <button 
+          onClick={goToPrevious}
+          disabled={parseInt(ghazalNumber) <= 1}
+          className="btn-secondary flex items-center space-x-2 space-x-reverse disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span>←</span>
+          <span>غزل قبلی</span>
+        </button>
+
+        <Link to="/ghazals" className="btn-primary">
+          فهرست غزل‌ها
+        </Link>
+
+        <button 
+          onClick={goToNext}
+          className="btn-secondary flex items-center space-x-2 space-x-reverse"
+        >
+          <span>غزل بعدی</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      {/* Additional Actions */}
+      <div className="text-center">
+        <div className="card max-w-lg mx-auto">
+          <h3 className="text-lg font-bold text-theme-accent mb-4">
+            بیشتر از حافظ
+          </h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link to="/search" className="btn-secondary text-sm">
+              جستجو در غزل‌ها
+            </Link>
+            <Link to="/dashboard" className="btn-secondary text-sm">
+              فال امروز
+            </Link>
+            <Link to="/quotes" className="btn-secondary text-sm">
+              سخنان حکیمانه
+            </Link>
           </div>
         </div>
       </div>

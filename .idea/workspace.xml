@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="babe8b78-b58a-4c76-a43e-a57a34c2479a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/HafezFaal.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="babe8b78-b58a-4c76-a43e-a57a34c2479a" name="Changes" comment="first version">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/components/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/components/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,11 +88,34 @@
       <workItem from="1748846333878" duration="2212000" />
       <workItem from="1749116291335" duration="13000" />
       <workItem from="1749361033974" duration="4533000" />
-      <workItem from="1749387326727" duration="3021000" />
+      <workItem from="1749387326727" duration="4275000" />
+      <workItem from="1749396994244" duration="181000" />
     </task>
+    <task id="LOCAL-00001" summary="meow">
+      <option name="closed" value="true" />
+      <created>1749391062397</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1749391062397</updated>
+    </task>
+    <task id="LOCAL-00002" summary="first version">
+      <option name="closed" value="true" />
+      <created>1749391076405</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1749391076405</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="meow" />
+    <MESSAGE value="first version" />
+    <option name="LAST_COMMIT_MESSAGE" value="first version" />
   </component>
 </project>

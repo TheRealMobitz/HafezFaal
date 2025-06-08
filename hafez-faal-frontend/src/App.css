@@ -1,0 +1,37 @@
+/* Minimal custom styles that Tailwind doesn't handle */
+
+/* Custom animations */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rotate-animation {
+  animation: rotate 20s linear infinite;
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease;
+}
+
+/* For search highlighting */
+.search-highlight {
+  @apply bg-persian-gold text-white px-1 rounded font-semibold;
+}
+
+/* Glass effect utility */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.8);
+}

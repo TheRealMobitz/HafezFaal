@@ -1,0 +1,316 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Keep all your existing font-face declarations */
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-Thin.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-UltraLight.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-UltraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-Light.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-Regular.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-Medium.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-DemiBold.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-DemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-Bold.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-ExtraBold.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  src: url('../public/fonts/IRANSansX-Black.woff2') format('woff2'),
+       url('../public/fonts/IRANSansX-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    direction: rtl;
+    text-align: right;
+    font-family: 'IRANSansX', 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+  }
+  
+  body {
+    font-family: 'IRANSansX', 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+    direction: rtl;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 400;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Light mode body */
+  body:not(.dark) {
+    background: linear-gradient(135deg, #faf0e6 0%, #fffff0 100%);
+    color: #2c3e50;
+  }
+  
+  /* Dark mode body */
+  .dark body {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #252a3a 100%);
+    color: #e8e8e8;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Light mode buttons */
+  .btn-primary {
+    @apply bg-gradient-to-r from-persian-gold to-persian-saffron text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-1 inline-block text-center;
+  }
+  
+  /* Dark mode buttons */
+  .dark .btn-primary {
+    @apply bg-gradient-to-r from-dark-persian-gold to-dark-persian-amber text-dark-text-light shadow-lg border border-dark-persian-gold/30;
+  }
+  
+  .dark .btn-primary:hover {
+    @apply shadow-xl shadow-dark-persian-gold/20 border-dark-persian-gold/50;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-persian-cream to-persian-ivory border-2 border-persian-gold text-persian-blue px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:bg-gradient-to-r hover:from-persian-gold hover:to-persian-saffron hover:text-white hover:-translate-y-1 inline-block text-center;
+  }
+  
+  .dark .btn-secondary {
+    @apply bg-gradient-to-r from-dark-bg-secondary to-dark-bg-tertiary border-dark-persian-gold text-dark-text-light;
+  }
+  
+  .dark .btn-secondary:hover {
+    @apply bg-gradient-to-r from-dark-persian-gold to-dark-persian-amber text-dark-bg-primary;
+  }
+  
+  /* Header specific buttons */
+  .btn-header-primary {
+    @apply bg-gradient-to-r from-persian-gold to-persian-saffron hover:from-persian-saffron hover:to-persian-gold text-white px-4 py-2 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 text-sm;
+  }
+  
+  .dark .btn-header-primary {
+    @apply bg-gradient-to-r from-dark-persian-gold to-dark-persian-amber hover:from-dark-persian-amber hover:to-dark-persian-gold shadow-lg;
+  }
+  
+  .btn-header-secondary {
+    @apply bg-white/20 hover:bg-white/30 text-white border border-white/30 hover:border-white/50 px-4 py-2 rounded-xl font-semibold transition-all duration-300 hover:shadow-md hover:scale-105 text-sm;
+  }
+  
+  .dark .btn-header-secondary {
+    @apply bg-dark-persian-gold/20 hover:bg-dark-persian-gold/30 border-dark-persian-gold/30 hover:border-dark-persian-gold/50;
+  }
+  
+  /* Light mode cards */
+  .card {
+    @apply bg-gradient-to-br from-white to-persian-cream p-6 rounded-2xl shadow-lg border-2 border-persian-gold/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-2;
+  }
+  
+  /* Dark mode cards */
+  .dark .card {
+    @apply bg-gradient-to-br from-dark-bg-secondary to-dark-bg-tertiary border-dark-persian-gold/30 shadow-xl;
+  }
+  
+  .dark .card:hover {
+    @apply shadow-2xl shadow-dark-persian-gold/10 border-dark-persian-gold/50;
+  }
+  
+  .persian-text {
+    @apply text-right leading-loose tracking-wide;
+  }
+
+  .font-persian {
+    font-family: 'IRANSansX', 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+  }
+
+  /* Theme-aware text colors */
+  .text-primary {
+    @apply text-persian-blue;
+  }
+  
+  .dark .text-primary {
+    @apply text-dark-text-light;
+  }
+  
+  .text-secondary {
+    @apply text-text-medium;
+  }
+  
+  .dark .text-secondary {
+    @apply text-dark-text-medium;
+  }
+  
+  .text-accent {
+    @apply text-persian-gold;
+  }
+  
+  .dark .text-accent {
+    @apply text-dark-persian-gold;
+  }
+  
+  /* Navigation styles - Fixed by removing 'group' from @apply */
+  .nav-link {
+    @apply text-white/90 hover:text-white px-4 py-2 rounded-xl transition-all duration-300 hover:bg-white/10 relative overflow-hidden;
+  }
+  
+  .nav-link-active {
+    @apply text-white bg-white/20 shadow-lg;
+  }
+  
+  .nav-link::before {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-0.5 bg-persian-gold transform scale-x-0 transition-transform duration-300;
+  }
+  
+  .dark .nav-link::before {
+    @apply bg-dark-persian-gold;
+  }
+  
+  .nav-link:hover::before,
+  .nav-link-active::before {
+    @apply scale-x-100;
+  }
+  
+  .dark .nav-link:hover {
+    @apply bg-dark-persian-gold/20;
+  }
+  
+  .dark .nav-link-active {
+    @apply bg-dark-persian-gold/30;
+  }
+  
+  /* Mobile navigation styles */
+  .mobile-nav-link {
+    @apply text-white/90 hover:text-white px-4 py-3 rounded-xl transition-all duration-300 hover:bg-white/10 block;
+  }
+  
+  .mobile-nav-link-active {
+    @apply text-white bg-white/20 shadow-md;
+  }
+  
+  .dark .mobile-nav-link:hover {
+    @apply bg-dark-persian-gold/20;
+  }
+  
+  .dark .mobile-nav-link-active {
+    @apply bg-dark-persian-gold/30;
+  }
+}
+
+@layer utilities {
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Theme transition utility */
+  .theme-transition {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  /* Border utilities for dark mode */
+  .border-theme {
+    @apply border-persian-gold/30;
+  }
+  
+  .dark .border-theme {
+    @apply border-dark-persian-gold/30;
+  }
+  
+  /* Text color utilities */
+  .text-theme-primary {
+    @apply text-text-dark;
+  }
+  
+  .dark .text-theme-primary {
+    @apply text-dark-text-light;
+  }
+  
+  .text-theme-secondary {
+    @apply text-text-medium;
+  }
+  
+  .dark .text-theme-secondary {
+    @apply text-dark-text-medium;
+  }
+  
+  .text-theme-accent {
+    @apply text-persian-blue;
+  }
+  
+  .dark .text-theme-accent {
+    @apply text-dark-persian-gold;
+  }
+}

@@ -469,3 +469,361 @@ input:focus, select:focus, textarea:focus {
 .dark input:focus, .dark select:focus, .dark textarea:focus {
   box-shadow: 0 0 0 3px rgba(196, 155, 42, 0.1);
 }
+
+/* ========================================
+   AUDIO PLAYER STYLES - RTL FIXED
+   ======================================== */
+
+/* Main Audio Player Container */
+.audio-player {
+  @apply relative overflow-hidden rounded-2xl border-2 border-persian-gold/20 dark:border-dark-persian-gold/20 shadow-xl;
+  background: linear-gradient(135deg, rgba(250, 240, 230, 0.8) 0%, rgba(255, 255, 240, 0.6) 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .audio-player {
+  background: linear-gradient(135deg, rgba(37, 42, 58, 0.8) 0%, rgba(31, 38, 56, 0.6) 100%);
+}
+
+.audio-player:hover {
+  @apply shadow-2xl;
+  transform: translateY(-2px);
+}
+
+/* Audio Player Background Patterns */
+.audio-player-bg {
+  @apply absolute inset-0 opacity-30;
+}
+
+.audio-player-bg .pattern-circle {
+  @apply absolute w-12 h-12 border-2 border-persian-gold/40 dark:border-dark-persian-gold/40 rounded-full;
+  animation: spin 20s linear infinite;
+}
+
+.audio-player-bg .pattern-square {
+  @apply absolute w-8 h-8 border border-persian-saffron/50 dark:border-dark-persian-amber/50 transform rotate-45;
+  animation: pulse 3s infinite;
+}
+
+.audio-player-bg .pattern-note {
+  @apply absolute text-2xl text-persian-gold/30 dark:text-dark-persian-gold/30;
+  animation: pulse 4s infinite;
+}
+
+/* Volume Slider - RTL Consistent */
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+  direction: rtl; /* RTL for volume slider */
+  background: linear-gradient(to left, var(--volume-color) var(--volume-percent), rgba(212, 175, 55, 0.2) var(--volume-percent));
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #f4c430);
+  border: 3px solid white;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #f4c430);
+  border: 3px solid white;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.dark .volume-slider {
+  background: linear-gradient(to left, var(--volume-color-dark) var(--volume-percent), rgba(196, 155, 42, 0.2) var(--volume-percent));
+}
+
+.dark .volume-slider::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #c49b2a, #b8922a);
+}
+
+.dark .volume-slider::-moz-range-thumb {
+  background: linear-gradient(135deg, #c49b2a, #b8922a);
+}
+
+/* Play/Pause Button */
+.audio-play-button {
+  @apply relative flex items-center justify-center text-white transition-all duration-500 shadow-2xl;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #f4c430);
+}
+
+.audio-play-button:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(212, 175, 55, 0.4);
+}
+
+.audio-play-button:active {
+  transform: scale(1.05);
+}
+
+.audio-play-button:disabled {
+  @apply bg-gray-400 cursor-not-allowed;
+  transform: scale(0.95);
+}
+
+.dark .audio-play-button {
+  background: linear-gradient(135deg, #c49b2a, #b8922a);
+}
+
+.dark .audio-play-button:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(196, 155, 42, 0.4);
+}
+
+/* Playing Animation Ring */
+.audio-ring-animation {
+  @apply absolute inset-0 rounded-full border-4 border-white/30;
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Progress Bar Container - RTL Fixed */
+.progress-container {
+  @apply relative w-full h-4 rounded-full cursor-pointer shadow-inner overflow-hidden;
+  background: linear-gradient(to right, rgba(250, 240, 230, 0.7), rgba(255, 255, 240, 0.7));
+  direction: ltr; /* LTR for proper positioning */
+}
+
+.dark .progress-container {
+  background: linear-gradient(to right, rgba(37, 42, 58, 0.7), rgba(31, 38, 56, 0.7));
+}
+
+/* Progress Bar Background Glow */
+.progress-bg-glow {
+  @apply absolute inset-0 rounded-full;
+  background: linear-gradient(to right, rgba(212, 175, 55, 0.2), rgba(244, 196, 48, 0.2));
+}
+
+.dark .progress-bg-glow {
+  background: linear-gradient(to right, rgba(196, 155, 42, 0.2), rgba(184, 148, 31, 0.2));
+}
+
+/* Progress Bar Fill - RTL Implementation */
+.progress-fill-rtl {
+  @apply absolute h-full rounded-full transition-all duration-300 shadow-lg;
+  background: linear-gradient(to right, #d4af37, #f4c430, #d4af37);
+  top: 0;
+  right: 0; /* Always start from right */
+}
+
+.dark .progress-fill-rtl {
+  background: linear-gradient(to right, #c49b2a, #b8922a, #c49b2a);
+}
+
+/* Progress Fill Glow Effect */
+.progress-fill-glow {
+  @apply absolute inset-0 rounded-full;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: pulse 2s infinite;
+}
+
+/* Progress Handle - RTL Fixed */
+.progress-handle {
+  @apply absolute top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-xl transition-all duration-300;
+  border: 3px solid #d4af37;
+}
+
+.progress-handle:hover,
+.progress-container:hover .progress-handle {
+  transform: translateY(-50%) scale(1.2);
+}
+
+.progress-handle-inner {
+  @apply absolute inset-1 bg-persian-gold dark:bg-dark-persian-gold rounded-full;
+}
+
+.dark .progress-handle {
+  border-color: #c49b2a;
+}
+
+/* Time Display */
+.time-display {
+  @apply flex justify-between items-center text-sm font-medium;
+  direction: ltr; /* Keep time display LTR for readability */
+}
+
+.time-current {
+  @apply text-theme-accent font-mono;
+  min-width: 50px;
+  text-align: right; /* Right align current time in RTL */
+}
+
+.time-duration {
+  @apply text-theme-secondary font-mono;
+  min-width: 50px;
+  text-align: left; /* Left align duration in RTL */
+}
+
+/* Audio Info Section */
+.audio-info {
+  @apply text-center rounded-xl p-4 border;
+  background: linear-gradient(45deg, rgba(212, 175, 55, 0.1), rgba(244, 196, 48, 0.1));
+  border-color: rgba(212, 175, 55, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.dark .audio-info {
+  background: linear-gradient(45deg, rgba(196, 155, 42, 0.1), rgba(184, 148, 31, 0.1));
+  border-color: rgba(196, 155, 42, 0.2);
+}
+
+.audio-info-title {
+  @apply flex items-center justify-center space-x-2 space-x-reverse mb-1;
+}
+
+.audio-info-subtitle {
+  @apply text-xs text-theme-secondary;
+}
+
+/* Error State */
+.audio-error {
+  @apply text-center rounded-xl p-4 border;
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.dark .audio-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.audio-error-icon {
+  @apply text-xl mb-2;
+}
+
+.audio-error-message {
+  @apply text-sm font-medium text-red-700 dark:text-red-400;
+}
+
+.audio-error-details {
+  @apply text-xs text-red-600/80 dark:text-red-400/80 mt-1;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid #ffffff;
+  animation: spin 1s linear infinite;
+  width: 32px;
+  height: 32px;
+}
+
+/* Pause Icon (Two Bars) */
+.pause-icon {
+  @apply flex space-x-1;
+}
+
+.pause-bar {
+  @apply w-1.5 h-6 bg-white rounded-full;
+}
+
+/* Play Icon (Triangle) */
+.play-icon {
+  margin-left: 4px; /* Slight offset for visual centering */
+}
+
+/* Hover States */
+.audio-player:hover .volume-slider {
+  opacity: 1;
+}
+
+.audio-player .volume-slider {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .volume-slider {
+    width: 50px;
+  }
+  
+  .audio-play-button {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .progress-handle {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .audio-player {
+    @apply p-4;
+  }
+}
+
+@media (max-width: 480px) {
+  .volume-slider {
+    width: 40px;
+  }
+  
+  .audio-play-button {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .time-display {
+    @apply text-xs;
+  }
+}
+
+/* Animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Utility Classes */
+.border-3 {
+  border-width: 3px;
+}
+
+.shadow-3xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+.dark .shadow-3xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(196, 155, 42, 0.3);
+}

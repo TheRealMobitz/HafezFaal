@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
+import HafezAudioPlayer from './HafezAudioPlayer';
 
 const GhazalDetail = () => {
   const { ghazalNumber } = useParams();
@@ -10,6 +11,7 @@ const GhazalDetail = () => {
   const [error, setError] = useState(null);
   const [showInterpretation, setShowInterpretation] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
+  const [showAudioPlayer, setShowAudioPlayer] = useState(true);
 
   useEffect(() => {
     fetchGhazal();
@@ -94,6 +96,13 @@ const GhazalDetail = () => {
           غزل شماره {ghazal.ghazal_number}
         </h1>
       </div>
+
+      {/* Audio Player */}
+      {showAudioPlayer && (
+        <div className="mb-8">
+          <HafezAudioPlayer ghazalNumber={parseInt(ghazalNumber)} />
+        </div>
+      )}
 
       {/* Content */}
       <div className="mb-8">
@@ -203,6 +212,13 @@ const GhazalDetail = () => {
             بیشتر از حافظ
           </h3>
           <div className="flex flex-wrap justify-center gap-3">
+            <button 
+              onClick={() => setShowAudioPlayer(!showAudioPlayer)}
+              className="btn-secondary text-sm flex items-center space-x-2 space-x-reverse"
+            >
+              <span>🎵</span>
+              <span>{showAudioPlayer ? 'مخفی کردن پخش‌کننده' : 'نمایش پخش‌کننده'}</span>
+            </button>
             <Link to="/search" className="btn-secondary text-sm">
               جستجو در غزل‌ها
             </Link>

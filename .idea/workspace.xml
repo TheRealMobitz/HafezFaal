@@ -6,13 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="babe8b78-b58a-4c76-a43e-a57a34c2479a" name="Changes" comment="second version (added animations)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HafezFaal/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/HafezFaal/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faal/api_urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/faal/api_urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faal/api_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/faal/api_views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faal/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/faal/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/components/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/components/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/components/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/components/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/components/GhazalDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/components/GhazalDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hafez-faal-frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/hafez-faal-frontend/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +102,7 @@
       <workItem from="1749387326727" duration="4275000" />
       <workItem from="1749396994244" duration="181000" />
       <workItem from="1749401550641" duration="204000" />
-      <workItem from="1749402953278" duration="1717000" />
+      <workItem from="1749402953278" duration="3615000" />
     </task>
     <task id="LOCAL-00001" summary="meow">
       <option name="closed" value="true" />
@@ -140,7 +136,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749401592903</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="second version (added animations)">
+      <option name="closed" value="true" />
+      <created>1749404865110</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1749404865110</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +154,7 @@
     <MESSAGE value="meow" />
     <MESSAGE value="first version" />
     <MESSAGE value="second version (added animations" />
-    <option name="LAST_COMMIT_MESSAGE" value="second version (added animations" />
+    <MESSAGE value="second version (added animations)" />
+    <option name="LAST_COMMIT_MESSAGE" value="second version (added animations)" />
   </component>
 </project>

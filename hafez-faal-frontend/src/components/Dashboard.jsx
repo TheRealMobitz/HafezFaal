@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiService } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import HafezAudioPlayer from './HafezAudioPlayer';
+
 
 const Dashboard = () => {
   const [faalData, setFaalData] = useState(null);
@@ -72,6 +74,12 @@ const Dashboard = () => {
                 <span className="text-theme-accent font-semibold">
                   غزل شماره {faalData.faal.ghazal.ghazal_number}
                 </span>
+              </div>
+              <div className="mb-6">
+                <h4 className="text-xl font-semibold text-theme-accent mb-4 text-center">
+                  قرائت فال امروز:
+                </h4>
+                <HafezAudioPlayer ghazalNumber={faalData.faal.ghazal.ghazal_number} />
               </div>
             </div>
 

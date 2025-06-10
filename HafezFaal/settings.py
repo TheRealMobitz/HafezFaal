@@ -100,7 +100,9 @@ if not os.environ.get('VERCEL'):
 STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
 
 # Use WhiteNoise for static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

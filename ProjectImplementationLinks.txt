@@ -1,0 +1,16 @@
+از آنجایی که برای مینی پروژه از فایل های صوتی استفاده شد(نسخه لوکال) حجم فایل ها زیاد شد
+و با هماهنگی استاد قرار شد لینک گیت و نسخه دیپلوی شده ارسال گردد
+
+GIT HUB(Deployed branch):
+https://github.com/TheRealMobitz/HafezFaal/tree/Deployed
+
+GIT HUB(main branch):
+https://github.com/TheRealMobitz/HafezFaal/tree/main
+
+Vercel Backend deployment:
+https://vercel.com/mobitzs-projects/hafez-faal-backend
+https://hafez-faal-backend.vercel.app/
+
+Vercel Frontend  deployment:
+https://vercel.com/mobitzs-projects/hafez-faal-frontend
+https://hafez-faal-frontend.vercel.app/

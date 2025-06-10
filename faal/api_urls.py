@@ -2,7 +2,10 @@ from django.urls import path
 from . import api_views
 
 urlpatterns = [
-    # CSRF token endpoint - MUST be first
+    # Health check - MUST be first for debugging
+    path('health/', api_views.health_check, name='api_health'),
+    
+    # CSRF token endpoint
     path('csrf/', api_views.get_csrf_token, name='api_csrf'),
     
     # Public endpoints

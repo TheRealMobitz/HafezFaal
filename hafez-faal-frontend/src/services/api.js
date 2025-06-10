@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+// Use environment variable for API URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -9,6 +10,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
   },
+  timeout: 10000, // 10 second timeout
 });
 
 // Add request interceptor to handle CSRF
@@ -25,7 +27,8 @@ api.interceptors.request.use(
       try {
         console.log('Fetching CSRF token...');
         const csrfResponse = await axios.get(`${API_BASE_URL}/csrf/`, { 
-          withCredentials: true 
+          withCredentials: true,
+          timeout: 5000 
         });
         
         // Try to get token from cookie after fetching
@@ -66,10 +69,11 @@ api.interceptors.response.use(
     if (response?.status === 403) {
       console.warn('CSRF or authentication error.');
     } else if (response?.status === 401) {
-      console.warn('Authentication required. Redirecting to login...');
+      console.warn('Authentication required.');
       localStorage.removeItem('user');
       if (!window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
+        // Don't redirect automatically in production, just log
+        console.log('User needs to login');
       }
     } else if (response?.status === 500) {
       console.error('Server error:', response.data);
@@ -82,20 +86,27 @@ api.interceptors.response.use(
 );
 
 export const apiService = {
+  // Health check
+  healthCheck: () => api.get('/health/'),
+  
   // CSRF
   getCSRFToken: () => api.get('/csrf/'),
   
-  // Auth
+  // Auth endpoints
   login: (credentials) => api.post('/auth/login/', credentials),
   register: (userData) => api.post('/auth/register/', userData),
   logout: () => api.post('/auth/logout/'),
   getCurrentUser: () => api.get('/auth/user/'),
 
-  // Data
+  // Data endpoints
   getDailyQuote: () => api.get('/quote/'),
   getDashboard: () => api.get('/dashboard/'),
   getQuotes: () => api.get('/quotes/'),
   getGhazals: () => api.get('/ghazals/'),
+  
+  // Helper method to get current API URL (for debugging)
+  getApiUrl: () => API_BASE_URL,
 };
 
+// Export both named and default
 export default api;

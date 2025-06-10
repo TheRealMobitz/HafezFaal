@@ -20,16 +20,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuthStatus = async () => {
-    try {
-      const response = await apiService.getCurrentUser();
-      setUser(response.data);
-    } catch (error) {
+  try {
+    const response = await apiService.getCurrentUser();
+    setUser(response.data);
+  } catch (error) {
+    if (error.response?.status === 403) {
+      // User not authenticated - this is normal
+      console.debug('User not authenticated');
+    } else {
       console.warn('Auth check failed:', error.response?.status);
-      setUser(null);
-    } finally {
-      setLoading(false);
     }
-  };
+    setUser(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const login = async (username, password) => {
     try {

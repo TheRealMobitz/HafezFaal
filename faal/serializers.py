@@ -50,9 +50,33 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Remove password2 as it's not needed for user creation
         validated_data.pop('password2', None)
-        user = User.objects.create_user(**validated_data)
-        return user
-
+        
+        try:
+            # Create user with proper password hashing and explicit transaction
+            from django.db import transaction
+            
+            with transaction.atomic():
+                # Create user with create_user method (handles password hashing)
+                user = User.objects.create_user(
+                    username=validated_data['username'],
+                    email=validated_data['email'],
+                    password=validated_data['password']
+                )
+                
+                # Force save to ensure persistence
+                user.save()
+                
+                # Verify user was actually saved
+                if not User.objects.filter(pk=user.pk).exists():
+                    raise Exception("User was not properly saved to database")
+                
+                print(f"User created and verified in serializer: {user.username} (ID: {user.pk})")
+                return user
+                
+        except Exception as e:
+            print(f"Error creating user in serializer: {str(e)}")
+            raise serializers.ValidationError(f"خطا در ایجاد کاربر: {str(e)}")
+        
 class QuoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quote

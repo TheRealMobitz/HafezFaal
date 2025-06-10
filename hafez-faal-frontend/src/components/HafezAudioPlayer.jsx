@@ -4,45 +4,129 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [volume, setVolume] = useState(0.8);
   const [isHovered, setIsHovered] = useState(false);
+  const [audioAvailable, setAudioAvailable] = useState(false);
+  const [currentSourceIndex, setCurrentSourceIndex] = useState(0);
   const audioRef = useRef(null);
 
-  // Generate audio file paths
-  const getAudioSrc = () => {
-    const mp3Path = `/audio/hafez/${ghazalNumber}.mp3`;
-    const oggPath = `/audio/hafez/ogg/${ghazalNumber}.ogg`;
-    return { mp3: mp3Path, ogg: oggPath };
+  // External GitHub repository for audio files
+  const GITHUB_AUDIO_BASE = 'https://raw.githubusercontent.com/mahdiit/DivanHafezAudio/master';
+
+  // Generate audio file paths - External GitHub + Local fallback
+  const getAudioSources = () => {
+    return [
+      // Primary: External GitHub sources
+      `${GITHUB_AUDIO_BASE}/Hafez-Audio/${ghazalNumber}.mp3`,
+      `${GITHUB_AUDIO_BASE}/Hafez-Audio-Ogg/${ghazalNumber}.opus`,
+      
+      // Fallback: Local sources (if you add them later)
+      `/audio/hafez/${ghazalNumber}.mp3`,
+      `/audio/hafez/ogg/${ghazalNumber}.ogg`
+    ];
   };
 
-  const { mp3, ogg } = getAudioSrc();
+  const audioSources = getAudioSources();
 
   useEffect(() => {
+    // Reset states when ghazal changes
+    setLoading(true);
+    setError(null);
+    setAudioAvailable(false);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+    setCurrentSourceIndex(0);
+    
+    // Start loading audio
+    loadAudio();
+  }, [ghazalNumber]);
+
+  const loadAudio = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const setAudioData = () => {
-      setDuration(audio.duration);
-      setCurrentTime(audio.currentTime);
+    console.log(`Loading audio for ghazal ${ghazalNumber}`);
+    console.log(`Trying source: ${audioSources[currentSourceIndex]}`);
+    
+    // Clean up existing listeners
+    const cleanupListeners = () => {
+      audio.removeEventListener('loadstart', handleLoadStart);
+      audio.removeEventListener('canplay', handleCanPlay);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('canplaythrough', handleCanPlayThrough);
     };
 
-    const setAudioTime = () => setCurrentTime(audio.currentTime);
-    
+    // Event handlers
     const handleLoadStart = () => {
+      console.log('Audio loading started...');
       setLoading(true);
       setError(null);
     };
-    
+
     const handleCanPlay = () => {
-      setLoading(false);
+      console.log('Audio can play');
+      setAudioAvailable(true);
       setError(null);
     };
-    
-    const handleError = () => {
+
+    const handleCanPlayThrough = () => {
+      console.log('Audio can play through');
       setLoading(false);
-      setError('فایل صوتی یافت نشد');
+      setAudioAvailable(true);
+    };
+
+    const handleLoadedMetadata = () => {
+      console.log('Audio metadata loaded, duration:', audio.duration);
+      if (audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration);
+      }
+    };
+
+    const handleError = (e) => {
+      const errorDetails = e.target.error;
+      console.error('Audio loading failed:', {
+        code: errorDetails?.code,
+        message: errorDetails?.message,
+        currentSource: audioSources[currentSourceIndex],
+        sourceIndex: currentSourceIndex
+      });
+      
+      cleanupListeners();
+      
+      // Try next source if available
+      const nextIndex = currentSourceIndex + 1;
+      if (nextIndex < audioSources.length) {
+        console.log(`Trying next source (${nextIndex + 1}/${audioSources.length}): ${audioSources[nextIndex]}`);
+        setCurrentSourceIndex(nextIndex);
+        setTimeout(() => {
+          audio.src = audioSources[nextIndex];
+          audio.load();
+        }, 500);
+      } else {
+        setLoading(false);
+        setAudioAvailable(false);
+        
+        // Provide specific error messages
+        if (errorDetails?.code === 4) {
+          setError('فایل صوتی در GitHub یافت نشد');
+        } else if (errorDetails?.code === 3) {
+          setError('خطا در کدگذاری فایل صوتی');
+        } else if (errorDetails?.code === 2) {
+          setError('خطا در اتصال به GitHub');
+        } else {
+          setError('فایل صوتی برای این غزل موجود نیست');
+        }
+      }
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime || 0);
     };
 
     const handleEnded = () => {
@@ -50,52 +134,94 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
       setCurrentTime(0);
     };
 
-    audio.addEventListener('loadeddata', setAudioData);
-    audio.addEventListener('timeupdate', setAudioTime);
+    // Clean up existing listeners
+    cleanupListeners();
+
+    // Add event listeners
     audio.addEventListener('loadstart', handleLoadStart);
     audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('canplaythrough', handleCanPlayThrough);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
     audio.addEventListener('error', handleError);
+    audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('ended', handleEnded);
 
-    // Set initial volume
+    // Set initial properties
     audio.volume = volume;
+    audio.preload = 'metadata'; // Start with metadata for faster loading
+    audio.crossOrigin = 'anonymous'; // Required for external sources
+    
+    // Load the audio - start with first source (GitHub MP3)
+    audio.src = audioSources[currentSourceIndex];
+    audio.load();
 
-    return () => {
-      audio.removeEventListener('loadeddata', setAudioData);
-      audio.removeEventListener('timeupdate', setAudioTime);
-      audio.removeEventListener('loadstart', handleLoadStart);
-      audio.removeEventListener('canplay', handleCanPlay);
-      audio.removeEventListener('error', handleError);
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, [ghazalNumber, volume]);
+    // Return cleanup function
+    return cleanupListeners;
+  };
 
-  const togglePlayPause = () => {
+  const togglePlayPause = async () => {
+    if (!audioAvailable || error) return;
+    
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
-      audio.play().catch(err => {
-        console.error('Error playing audio:', err);
-        setError('خطا در پخش فایل صوتی');
-      });
-      setIsPlaying(true);
+    try {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        // Switch to auto preload for better playback
+        if (audio.preload !== 'auto') {
+          audio.preload = 'auto';
+          audio.load();
+          
+          // Wait a moment for better loading
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+              setError(null);
+            })
+            .catch(err => {
+              console.error('Error playing audio:', err);
+              setIsPlaying(false);
+              
+              if (err.name === 'NotAllowedError') {
+                setError('لطفاً اجازه پخش صوتی را بدهید');
+              } else if (err.name === 'NotSupportedError') {
+                setError('فرمت فایل پشتیبانی نمی‌شود');
+              } else {
+                setError('خطا در پخش فایل صوتی');
+              }
+            });
+        }
+      }
+    } catch (err) {
+      console.error('Toggle play/pause error:', err);
+      setError('خطا در کنترل پخش');
     }
   };
 
   const handleSeek = (e) => {
+    if (!audioAvailable || error || !duration) return;
+    
     const audio = audioRef.current;
-    if (!audio || !duration) return;
+    if (!audio) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
-    // For RTL: calculate from right side (0 = far right, 1 = far left)
     const percent = (rect.right - e.clientX) / rect.width;
     const seekTime = Math.max(0, Math.min(duration, percent * duration));
-    audio.currentTime = seekTime;
-    setCurrentTime(seekTime);
+    
+    try {
+      audio.currentTime = seekTime;
+      setCurrentTime(seekTime);
+    } catch (err) {
+      console.warn('Seek failed:', err);
+    }
   };
 
   const handleVolumeChange = (e) => {
@@ -113,9 +239,73 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Progress calculation for RTL
   const progressPercent = duration ? Math.max(0, Math.min(100, (currentTime / duration) * 100)) : 0;
   const volumePercent = volume * 100;
+
+  // Get source type for display
+  const getSourceType = () => {
+    if (currentSourceIndex === 0) return 'GitHub MP3';
+    if (currentSourceIndex === 1) return 'GitHub OPUS';
+    if (currentSourceIndex === 2) return 'محلی MP3';
+    return 'محلی OGG';
+  };
+
+  // Show detailed error state
+  if (!audioAvailable && !loading) {
+    return (
+      <div className="audio-player">
+        <div className="relative z-10 p-6">
+          <div className="flex items-center justify-center space-x-3 space-x-reverse mb-4">
+            <div className="w-12 h-12 bg-red-400 dark:bg-red-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-xl">🎵</span>
+            </div>
+            <div className="text-center">
+              <h4 className="text-lg font-semibold text-theme-accent">قرائت صوتی</h4>
+              <p className="text-sm text-theme-secondary">غزل شماره {ghazalNumber}</p>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <div className="audio-error">
+              <div className="audio-error-icon mb-2">⚠️</div>
+              <p className="audio-error-message">{error || 'فایل صوتی در دسترس نیست'}</p>
+              <p className="audio-error-details">
+                ممکن است این غزل هنوز قرائت صوتی نشده باشد
+              </p>
+              
+              <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                <p className="text-xs text-blue-700 dark:text-blue-300 text-center font-bold mb-2">
+                  🌐 منابع بررسی شده:
+                </p>
+                <div className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
+                  <p>• GitHub MP3: {GITHUB_AUDIO_BASE}/Hafez-Audio/{ghazalNumber}.mp3</p>
+                  <p>• GitHub OPUS: {GITHUB_AUDIO_BASE}/Hafez-Audio-Ogg/{ghazalNumber}.opus</p>
+                  <p>• منابع محلی (در صورت وجود)</p>
+                </div>
+              </div>
+              
+              <div className="mt-3 flex gap-2 justify-center">
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600"
+                >
+                  تلاش مجدد
+                </button>
+                <a 
+                  href={`${GITHUB_AUDIO_BASE}/Hafez-Audio/${ghazalNumber}.mp3`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                >
+                  بررسی فایل در GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -131,6 +321,18 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
         <div className="pattern-note bottom-8 right-8">♫</div>
       </div>
       
+      {/* Audio Element */}
+      <audio 
+        ref={audioRef} 
+        preload="metadata"
+        crossOrigin="anonymous"
+        controls={false}
+      >
+        <source src={audioSources[0]} type="audio/mpeg" />
+        <source src={audioSources[1]} type="audio/ogg; codecs=opus" />
+        مرورگر شما از پخش فایل صوتی پشتیبانی نمی‌کند.
+      </audio>
+      
       {/* Main Content */}
       <div className="relative z-10 p-6">
         {/* Header */}
@@ -141,38 +343,37 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
             </div>
             <div>
               <h4 className="text-lg font-bold text-theme-accent">قرائت غزل</h4>
-              <p className="text-xs text-theme-secondary">غزل شماره {ghazalNumber}</p>
+              <p className="text-xs text-theme-secondary">
+                غزل شماره {ghazalNumber}
+                {audioAvailable && ` (${getSourceType()})`}
+              </p>
             </div>
           </div>
           
-          {/* Volume Control - RTL Consistent */}
-          <div className="flex items-center space-x-2 space-x-reverse">
-            <span className="text-theme-secondary text-sm">
-              {volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'}
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={volume}
-              onChange={handleVolumeChange}
-              className="volume-slider w-20"
-              style={{
-                '--volume-percent': `${volumePercent}%`,
-                '--volume-color': '#d4af37',
-                '--volume-color-dark': '#c49b2a'
-              }}
-            />
-          </div>
+          {/* Volume Control */}
+          {(audioAvailable || loading) && !error && (
+            <div className="flex items-center space-x-2 space-x-reverse">
+              <span className="text-theme-secondary text-sm">
+                {volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'}
+              </span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={volume}
+                onChange={handleVolumeChange}
+                className="volume-slider w-20"
+                disabled={loading}
+                style={{
+                  '--volume-percent': `${volumePercent}%`,
+                  '--volume-color': '#d4af37',
+                  '--volume-color-dark': '#c49b2a'
+                }}
+              />
+            </div>
+          )}
         </div>
-
-        {/* Audio Element */}
-        <audio ref={audioRef} preload="metadata">
-          <source src={mp3} type="audio/mpeg" />
-          <source src={ogg} type="audio/ogg" />
-          مرورگر شما از پخش فایل صوتی پشتیبانی نمی‌کند.
-        </audio>
 
         {/* Controls */}
         <div className="space-y-6">
@@ -181,9 +382,8 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
             <button
               onClick={togglePlayPause}
               disabled={loading || error}
-              className={`audio-play-button ${isHovered ? 'ring-4 ring-persian-gold/30 dark:ring-dark-persian-gold/30' : ''}`}
+              className={`audio-play-button ${isHovered ? 'ring-4 ring-persian-gold/30 dark:ring-dark-persian-gold/30' : ''} ${(loading || error) ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {/* Animated ring effect when playing */}
               {isPlaying && !loading && !error && (
                 <div className="audio-ring-animation"></div>
               )}
@@ -207,62 +407,51 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
             </button>
           </div>
 
-          {/* Progress Bar - RTL Fixed */}
-          {!error && (
+          {/* Progress Bar */}
+          {audioAvailable && !error && (
             <div className="space-y-3">
               <div 
                 className="progress-container"
                 onClick={handleSeek}
               >
-                {/* Background glow */}
                 <div className="progress-bg-glow"></div>
-                
-                {/* Progress fill - RTL positioned */}
                 <div 
                   className="progress-fill-rtl"
-                  style={{ 
-                    width: `${progressPercent}%`
-                  }}
+                  style={{ width: `${progressPercent}%` }}
                 >
-                  {/* Animated glow effect */}
                   <div className="progress-fill-glow"></div>
                 </div>
-                
-                {/* Progress handle - RTL positioned */}
                 <div 
                   className={`progress-handle ${isHovered ? 'scale-125' : 'scale-100'}`}
-                  style={{ 
-                    right: `calc(${progressPercent}% - 12px)`
-                  }}
+                  style={{ right: `calc(${progressPercent}% - 12px)` }}
                 >
                   <div className="progress-handle-inner"></div>
                 </div>
               </div>
               
-              {/* Time Display */}
               <div className="time-display">
                 <span className="time-current">{formatTime(currentTime)}</span>
                 <span className="text-xs text-theme-secondary">•</span>
                 <span className="time-duration">
-                  {loading ? 'در حال بارگذاری...' : formatTime(duration)}
+                  {formatTime(duration)}
                 </span>
               </div>
             </div>
           )}
 
-          {/* Error Message */}
-          {error && (
-            <div className="audio-error">
-              <div className="audio-error-icon">⚠️</div>
-              <p className="audio-error-message">{error}</p>
-              <p className="audio-error-details">
-                فایل صوتی غزل شماره {ghazalNumber} در دسترس نیست
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center">
+              <div className="loading-spinner mx-auto mb-2"></div>
+              <p className="text-theme-secondary text-sm">
+                در حال بارگذاری از GitHub...
+                {currentSourceIndex > 0 && ` (منبع ${currentSourceIndex + 1})`}
               </p>
             </div>
           )}
 
           {/* Audio Info */}
-          {!error && !loading && (
+          {audioAvailable && !error && (
             <div className="audio-info">
               <div className="audio-info-title">
                 <span className="text-lg">🎙️</span>
@@ -272,6 +461,9 @@ const HafezAudioPlayer = ({ ghazalNumber }) => {
               </div>
               <p className="audio-info-subtitle">
                 استاد برجسته قرائت شعر فارسی
+              </p>
+              <p className="text-xs text-theme-secondary mt-1">
+                منبع: {getSourceType()} • GitHub Repository
               </p>
             </div>
           )}
